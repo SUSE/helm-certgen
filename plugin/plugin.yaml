@@ -1,0 +1,6 @@
+name: "certgen"
+version: "0.1.0"
+usage: "Generate certificates for Helm charts"
+description: |-
+  This plugin generates certificates for helm charts.
+command: "$HELM_PLUGIN_DIR/certgen.sh"
