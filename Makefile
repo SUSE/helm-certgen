@@ -10,6 +10,7 @@ tools:
 	go get -u github.com/golang/lint/golint
 	go get golang.org/x/tools/cmd/cover
 	go get github.com/tools/godep
+	go get github.com/spf13/cobra
 
 .PHONY: all
 all: clean test build
