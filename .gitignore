@@ -19,3 +19,6 @@ debug
 
 # vscode editor settings/files
 .vscode
+
+bin/*
+build/*
