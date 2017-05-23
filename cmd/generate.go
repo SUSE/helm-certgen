@@ -44,7 +44,7 @@ func newGenerateCmd(out io.Writer) *cobra.Command {
 
 func (g *generateCmd) run(args []string) error {
 	PrintInfo(g.out, "Creating")
-	certyaml := ""
+	var certyaml string
 	if len(g.certyaml) == 0 {
 		certyaml = args[0] + "/certs.yaml"
 		if _, err := os.Stat(certyaml); os.IsNotExist(err) {
