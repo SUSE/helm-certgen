@@ -45,5 +45,5 @@ test-style:
 build: 
 	@echo "================="
 	@echo "Building helm-certgen plugin @ $(BINDIR)"
-	GOBIN=$(BINDIR) $(GO) install $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' github.com/saurabhsurana/helm-certgen/cmd/...
+	GOBIN=$(BINDIR) $(GO) install $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' github.com/SUSE/helm-certgen/cmd/...
 
