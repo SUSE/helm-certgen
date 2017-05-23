@@ -10,6 +10,7 @@ var globalUsage = `Plugin for Kubernetes helm CLI.
 This supports 
 	$ helm certgen generate`
 
+//NewRootCmd creates the root command object
 func NewRootCmd(out io.Writer) *cobra.Command {
 
 	cmd := &cobra.Command{

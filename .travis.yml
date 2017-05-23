@@ -5,5 +5,12 @@ go:
 
 install: 
   - make tools
-  - make test
+
+script:
+  - make test-all
   - make build
+
+# safelist
+branches:
+  only:
+  - master
