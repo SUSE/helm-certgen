@@ -33,7 +33,7 @@ test-all: test-style
 test-unit:
 	@echo "================="
 	@echo "Running unit test"
-	go test -v ./...
+	go test $(go list ./... | grep -v vendor)
 
 .PHONY: test-style
 test-style:
@@ -45,5 +45,4 @@ test-style:
 build: 
 	@echo "================="
 	@echo "Building helm-certgen plugin @ $(BINDIR)"
-	GOBIN=$(BINDIR) $(GO) install $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' github.com/SUSE/helm-certgen/cmd/...
-
+	$(GO) build $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' -o $(BINDIR)/helm-certgen main.go
