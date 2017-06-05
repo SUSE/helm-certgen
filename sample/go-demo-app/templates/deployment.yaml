@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: go-demo
+  labels:
+    name: api-server
+    app: go-demo
+spec:
+  containers:
+    - name: api-server
+      image: suranasaurabh/go-demo:latest
+      ports:
+        - containerPort: 9090
+          name: http
+          protocol: TCP
+      volumeMounts:
+        - name: api-tls
+          mountPath: /etc/tls
+          readOnly: true
+  volumes:
+    - name: api-tls
+      secret:
+        secretName: go-demo-api-certificates
