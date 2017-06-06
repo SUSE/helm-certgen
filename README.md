@@ -36,5 +36,5 @@ In order to install the plugin, we will have to place the wrapper script from pl
 ```
 HELM_HOME=$(helm home)
 mkdir -p "$HELM_HOME/plugins/certgen"
-cp $GOPATH/github.com/SUSE/helm-certgen/plugin/* $HELM_HOME/plugins/certgen/
+cp $GOPATH/src/github.com/SUSE/helm-certgen/plugin/* $HELM_HOME/plugins/certgen/
 ```
