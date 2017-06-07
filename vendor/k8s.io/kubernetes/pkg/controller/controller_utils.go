@@ -29,7 +29,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/types"
-	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/strategicpatch"
 	"k8s.io/apimachinery/pkg/util/wait"
@@ -41,7 +40,6 @@ import (
 
 	"k8s.io/kubernetes/pkg/api"
 	"k8s.io/kubernetes/pkg/api/v1"
-	v1helper "k8s.io/kubernetes/pkg/api/v1/helper"
 	"k8s.io/kubernetes/pkg/api/validation"
 	extensions "k8s.io/kubernetes/pkg/apis/extensions/v1beta1"
 	"k8s.io/kubernetes/pkg/client/clientset_generated/clientset"
@@ -157,7 +155,6 @@ func (r *ControllerExpectations) DeleteExpectations(controllerKey string) {
 func (r *ControllerExpectations) SatisfiedExpectations(controllerKey string) bool {
 	if exp, exists, err := r.GetExpectations(controllerKey); exists {
 		if exp.Fulfilled() {
-			glog.V(4).Infof("Controller expectations fulfilled %#v", exp)
 			return true
 		} else if exp.isExpired() {
 			glog.V(4).Infof("Controller expectations expired %#v", exp)
@@ -287,7 +284,7 @@ type UIDSet struct {
 // UIDTrackingControllerExpectations tracks the UID of the pods it deletes.
 // This cache is needed over plain old expectations to safely handle graceful
 // deletion. The desired behavior is to treat an update that sets the
-// DeletionTimestamp on an object as a delete. To do so consistently, one needs
+// DeletionTimestamp on an object as a delete. To do so consistenly, one needs
 // to remember the expected deletes so they aren't double counted.
 // TODO: Track creates as well (#22599)
 type UIDTrackingControllerExpectations struct {
@@ -878,7 +875,7 @@ func AddOrUpdateTaintOnNode(c clientset.Interface, nodeName string, taint *v1.Ta
 		if err != nil {
 			return err
 		}
-		newNode, ok, err := v1helper.AddOrUpdateTaint(oldNode, taint)
+		newNode, ok, err := v1.AddOrUpdateTaint(oldNode, taint)
 		if err != nil {
 			return fmt.Errorf("Failed to update taint annotation!")
 		}
@@ -894,7 +891,7 @@ func AddOrUpdateTaintOnNode(c clientset.Interface, nodeName string, taint *v1.Ta
 // If passed a node it'll check if there's anything to be done, if taint is not present it won't issue
 // any API calls.
 func RemoveTaintOffNode(c clientset.Interface, nodeName string, taint *v1.Taint, node *v1.Node) error {
-	// Short circuit for limiting amount of API calls.
+	// Short circuit for limiting amout of API calls.
 	if node != nil {
 		match := false
 		for i := range node.Spec.Taints {
@@ -922,7 +919,7 @@ func RemoveTaintOffNode(c clientset.Interface, nodeName string, taint *v1.Taint,
 		if err != nil {
 			return err
 		}
-		newNode, ok, err := v1helper.RemoveTaint(oldNode, taint)
+		newNode, ok, err := v1.RemoveTaint(oldNode, taint)
 		if err != nil {
 			return fmt.Errorf("Failed to update taint annotation!")
 		}
@@ -962,19 +959,4 @@ func PatchNodeTaints(c clientset.Interface, nodeName string, oldNode *v1.Node, n
 
 	_, err = c.Core().Nodes().Patch(string(nodeName), types.StrategicMergePatchType, patchBytes)
 	return err
-}
-
-// WaitForCacheSync is a wrapper around cache.WaitForCacheSync that generates log messages
-// indicating that the controller identified by controllerName is waiting for syncs, followed by
-// either a successful or failed sync.
-func WaitForCacheSync(controllerName string, stopCh <-chan struct{}, cacheSyncs ...cache.InformerSynced) bool {
-	glog.Infof("Waiting for caches to sync for %s controller", controllerName)
-
-	if !cache.WaitForCacheSync(stopCh, cacheSyncs...) {
-		utilruntime.HandleError(fmt.Errorf("Unable to sync caches for %s controller", controllerName))
-		return false
-	}
-
-	glog.Infof("Caches are synced for %s controller", controllerName)
-	return true
 }

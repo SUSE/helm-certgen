@@ -27,7 +27,7 @@ import (
 	"github.com/golang/glog"
 	"github.com/imdario/mergo"
 
-	"k8s.io/client-go/pkg/api/v1"
+	"k8s.io/client-go/pkg/api"
 	restclient "k8s.io/client-go/rest"
 	clientauth "k8s.io/client-go/tools/auth"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
@@ -146,11 +146,7 @@ func (config *DirectClientConfig) ClientConfig() (*restclient.Config, error) {
 		clientConfig.Host = u.String()
 	}
 	if len(configAuthInfo.Impersonate) > 0 {
-		clientConfig.Impersonate = restclient.ImpersonationConfig{
-			UserName: configAuthInfo.Impersonate,
-			Groups:   configAuthInfo.ImpersonateGroups,
-			Extra:    configAuthInfo.ImpersonateUserExtra,
-		}
+		clientConfig.Impersonate = restclient.ImpersonationConfig{UserName: configAuthInfo.Impersonate}
 	}
 
 	// only try to read the auth information if we are secure
@@ -221,11 +217,7 @@ func (config *DirectClientConfig) getUserIdentificationPartialConfig(configAuthI
 		mergedConfig.BearerToken = string(tokenBytes)
 	}
 	if len(configAuthInfo.Impersonate) > 0 {
-		mergedConfig.Impersonate = restclient.ImpersonationConfig{
-			UserName: configAuthInfo.Impersonate,
-			Groups:   configAuthInfo.ImpersonateGroups,
-			Extra:    configAuthInfo.ImpersonateUserExtra,
-		}
+		mergedConfig.Impersonate = restclient.ImpersonationConfig{UserName: configAuthInfo.Impersonate}
 	}
 	if len(configAuthInfo.ClientCertificate) > 0 || len(configAuthInfo.ClientCertificateData) > 0 {
 		mergedConfig.CertFile = configAuthInfo.ClientCertificate
@@ -306,7 +298,7 @@ func (config *DirectClientConfig) Namespace() (string, bool, error) {
 	}
 
 	if len(configContext.Namespace) == 0 {
-		return v1.NamespaceDefault, false, nil
+		return api.NamespaceDefault, false, nil
 	}
 
 	overridden := false

@@ -387,14 +387,6 @@ func GetFlagDuration(cmd *cobra.Command, flag string) time.Duration {
 	return d
 }
 
-func GetPodRunningTimeoutFlag(cmd *cobra.Command) (time.Duration, error) {
-	timeout := GetFlagDuration(cmd, "pod-running-timeout")
-	if timeout <= 0 {
-		return timeout, fmt.Errorf("--pod-running-timeout must be higher than zero")
-	}
-	return timeout, nil
-}
-
 func AddValidateFlags(cmd *cobra.Command) {
 	cmd.Flags().Bool("validate", true, "If true, use a schema to validate the input before sending it")
 	cmd.Flags().String("schema-cache-dir", fmt.Sprintf("~/%s/%s", clientcmd.RecommendedHomeDir, clientcmd.RecommendedSchemaName), fmt.Sprintf("If non-empty, load/store cached API schemas in this directory, default is '$HOME/%s/%s'", clientcmd.RecommendedHomeDir, clientcmd.RecommendedSchemaName))
@@ -409,10 +401,6 @@ func AddFilenameOptionFlags(cmd *cobra.Command, options *resource.FilenameOption
 // AddDryRunFlag adds dry-run flag to a command. Usually used by mutations.
 func AddDryRunFlag(cmd *cobra.Command) {
 	cmd.Flags().Bool("dry-run", false, "If true, only print the object that would be sent, without sending it.")
-}
-
-func AddPodRunningTimeoutFlag(cmd *cobra.Command, defaultTimeout time.Duration) {
-	cmd.Flags().Duration("pod-running-timeout", defaultTimeout, "The length of time (like 5s, 2m, or 3h, higher than zero) to wait until at least one pod is running")
 }
 
 func AddApplyAnnotationFlags(cmd *cobra.Command) {
@@ -441,7 +429,7 @@ func ReadConfigDataFromReader(reader io.Reader, source string) ([]byte, error) {
 
 // Merge requires JSON serialization
 // TODO: merge assumes JSON serialization, and does not properly abstract API retrieval
-func Merge(codec runtime.Codec, dst runtime.Object, fragment string) (runtime.Object, error) {
+func Merge(codec runtime.Codec, dst runtime.Object, fragment, kind string) (runtime.Object, error) {
 	// encode dst into versioned json and apply fragment directly too it
 	target, err := runtime.Encode(codec, dst)
 	if err != nil {
@@ -712,7 +700,7 @@ func FilterResourceList(obj runtime.Object, filterFuncs kubectl.Filters, filterO
 
 // PrintFilterCount displays informational messages based on the number of resources found, hidden, or
 // config flags shown.
-func PrintFilterCount(out io.Writer, found, hidden, errors int, options *printers.PrintOptions, ignoreNotFound bool) {
+func PrintFilterCount(out io.Writer, found, hidden, errors int, resource string, options *printers.PrintOptions, ignoreNotFound bool) {
 	switch {
 	case errors > 0 || ignoreNotFound:
 		// print nothing

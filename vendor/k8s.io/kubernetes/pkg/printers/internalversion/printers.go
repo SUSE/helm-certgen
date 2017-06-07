@@ -20,9 +20,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"net"
 	"sort"
-	"strconv"
 	"strings"
 	"time"
 
@@ -32,7 +30,6 @@ import (
 	"k8s.io/kubernetes/federation/apis/federation"
 	"k8s.io/kubernetes/pkg/api"
 	"k8s.io/kubernetes/pkg/api/events"
-	"k8s.io/kubernetes/pkg/api/helper"
 	"k8s.io/kubernetes/pkg/apis/apps"
 	"k8s.io/kubernetes/pkg/apis/autoscaling"
 	"k8s.io/kubernetes/pkg/apis/batch"
@@ -226,8 +223,7 @@ func formatEndpoints(endpoints *api.Endpoints, ports sets.String) string {
 					}
 					addr := &ss.Addresses[i]
 					if !more {
-						hostPort := net.JoinHostPort(addr.IP, strconv.Itoa(int(port.Port)))
-						list = append(list, hostPort)
+						list = append(list, fmt.Sprintf("%s:%d", addr.IP, port.Port))
 					}
 					count++
 				}
@@ -1176,7 +1172,7 @@ func printPersistentVolume(pv *api.PersistentVolume, w io.Writer, options printe
 		claimRefUID += pv.Spec.ClaimRef.Name
 	}
 
-	modesStr := helper.GetAccessModesAsString(pv.Spec.AccessModes)
+	modesStr := api.GetAccessModesAsString(pv.Spec.AccessModes)
 	reclaimPolicyStr := string(pv.Spec.PersistentVolumeReclaimPolicy)
 
 	aQty := pv.Spec.Capacity[api.ResourceStorage]
@@ -1187,7 +1183,7 @@ func printPersistentVolume(pv *api.PersistentVolume, w io.Writer, options printe
 		aSize, modesStr, reclaimPolicyStr,
 		pv.Status.Phase,
 		claimRefUID,
-		helper.GetPersistentVolumeClass(pv),
+		api.GetPersistentVolumeClass(pv),
 		pv.Status.Reason,
 		translateTimestamp(pv.CreationTimestamp),
 	); err != nil {
@@ -1225,12 +1221,12 @@ func printPersistentVolumeClaim(pvc *api.PersistentVolumeClaim, w io.Writer, opt
 	capacity := ""
 	accessModes := ""
 	if pvc.Spec.VolumeName != "" {
-		accessModes = helper.GetAccessModesAsString(pvc.Status.AccessModes)
+		accessModes = api.GetAccessModesAsString(pvc.Status.AccessModes)
 		storage = pvc.Status.Capacity[api.ResourceStorage]
 		capacity = storage.String()
 	}
 
-	if _, err := fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s", name, phase, pvc.Spec.VolumeName, capacity, accessModes, helper.GetPersistentVolumeClaimClass(pvc), translateTimestamp(pvc.CreationTimestamp)); err != nil {
+	if _, err := fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s", name, phase, pvc.Spec.VolumeName, capacity, accessModes, api.GetPersistentVolumeClaimClass(pvc), translateTimestamp(pvc.CreationTimestamp)); err != nil {
 		return err
 	}
 	if _, err := fmt.Fprint(w, AppendLabels(pvc.Labels, options.ColumnLabels)); err != nil {

@@ -52,9 +52,7 @@ var _ = math.Inf
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
-// A compilation error at this line likely means your copy of the
-// proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.GoGoProtoPackageIsVersion1
 
 func (m *Cluster) Reset()                    { *m = Cluster{} }
 func (*Cluster) ProtoMessage()               {}
@@ -90,41 +88,41 @@ func init() {
 	proto.RegisterType((*ClusterStatus)(nil), "k8s.io.kubernetes.federation.apis.federation.v1beta1.ClusterStatus")
 	proto.RegisterType((*ServerAddressByClientCIDR)(nil), "k8s.io.kubernetes.federation.apis.federation.v1beta1.ServerAddressByClientCIDR")
 }
-func (m *Cluster) Marshal() (dAtA []byte, err error) {
+func (m *Cluster) Marshal() (data []byte, err error) {
 	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
 	if err != nil {
 		return nil, err
 	}
-	return dAtA[:n], nil
+	return data[:n], nil
 }
 
-func (m *Cluster) MarshalTo(dAtA []byte) (int, error) {
+func (m *Cluster) MarshalTo(data []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	dAtA[i] = 0xa
+	data[i] = 0xa
 	i++
-	i = encodeVarintGenerated(dAtA, i, uint64(m.ObjectMeta.Size()))
-	n1, err := m.ObjectMeta.MarshalTo(dAtA[i:])
+	i = encodeVarintGenerated(data, i, uint64(m.ObjectMeta.Size()))
+	n1, err := m.ObjectMeta.MarshalTo(data[i:])
 	if err != nil {
 		return 0, err
 	}
 	i += n1
-	dAtA[i] = 0x12
+	data[i] = 0x12
 	i++
-	i = encodeVarintGenerated(dAtA, i, uint64(m.Spec.Size()))
-	n2, err := m.Spec.MarshalTo(dAtA[i:])
+	i = encodeVarintGenerated(data, i, uint64(m.Spec.Size()))
+	n2, err := m.Spec.MarshalTo(data[i:])
 	if err != nil {
 		return 0, err
 	}
 	i += n2
-	dAtA[i] = 0x1a
+	data[i] = 0x1a
 	i++
-	i = encodeVarintGenerated(dAtA, i, uint64(m.Status.Size()))
-	n3, err := m.Status.MarshalTo(dAtA[i:])
+	i = encodeVarintGenerated(data, i, uint64(m.Status.Size()))
+	n3, err := m.Status.MarshalTo(data[i:])
 	if err != nil {
 		return 0, err
 	}
@@ -132,85 +130,85 @@ func (m *Cluster) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *ClusterCondition) Marshal() (dAtA []byte, err error) {
+func (m *ClusterCondition) Marshal() (data []byte, err error) {
 	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
 	if err != nil {
 		return nil, err
 	}
-	return dAtA[:n], nil
+	return data[:n], nil
 }
 
-func (m *ClusterCondition) MarshalTo(dAtA []byte) (int, error) {
+func (m *ClusterCondition) MarshalTo(data []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	dAtA[i] = 0xa
+	data[i] = 0xa
 	i++
-	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Type)))
-	i += copy(dAtA[i:], m.Type)
-	dAtA[i] = 0x12
+	i = encodeVarintGenerated(data, i, uint64(len(m.Type)))
+	i += copy(data[i:], m.Type)
+	data[i] = 0x12
 	i++
-	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Status)))
-	i += copy(dAtA[i:], m.Status)
-	dAtA[i] = 0x1a
+	i = encodeVarintGenerated(data, i, uint64(len(m.Status)))
+	i += copy(data[i:], m.Status)
+	data[i] = 0x1a
 	i++
-	i = encodeVarintGenerated(dAtA, i, uint64(m.LastProbeTime.Size()))
-	n4, err := m.LastProbeTime.MarshalTo(dAtA[i:])
+	i = encodeVarintGenerated(data, i, uint64(m.LastProbeTime.Size()))
+	n4, err := m.LastProbeTime.MarshalTo(data[i:])
 	if err != nil {
 		return 0, err
 	}
 	i += n4
-	dAtA[i] = 0x22
+	data[i] = 0x22
 	i++
-	i = encodeVarintGenerated(dAtA, i, uint64(m.LastTransitionTime.Size()))
-	n5, err := m.LastTransitionTime.MarshalTo(dAtA[i:])
+	i = encodeVarintGenerated(data, i, uint64(m.LastTransitionTime.Size()))
+	n5, err := m.LastTransitionTime.MarshalTo(data[i:])
 	if err != nil {
 		return 0, err
 	}
 	i += n5
-	dAtA[i] = 0x2a
+	data[i] = 0x2a
 	i++
-	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Reason)))
-	i += copy(dAtA[i:], m.Reason)
-	dAtA[i] = 0x32
+	i = encodeVarintGenerated(data, i, uint64(len(m.Reason)))
+	i += copy(data[i:], m.Reason)
+	data[i] = 0x32
 	i++
-	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Message)))
-	i += copy(dAtA[i:], m.Message)
+	i = encodeVarintGenerated(data, i, uint64(len(m.Message)))
+	i += copy(data[i:], m.Message)
 	return i, nil
 }
 
-func (m *ClusterList) Marshal() (dAtA []byte, err error) {
+func (m *ClusterList) Marshal() (data []byte, err error) {
 	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
 	if err != nil {
 		return nil, err
 	}
-	return dAtA[:n], nil
+	return data[:n], nil
 }
 
-func (m *ClusterList) MarshalTo(dAtA []byte) (int, error) {
+func (m *ClusterList) MarshalTo(data []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	dAtA[i] = 0xa
+	data[i] = 0xa
 	i++
-	i = encodeVarintGenerated(dAtA, i, uint64(m.ListMeta.Size()))
-	n6, err := m.ListMeta.MarshalTo(dAtA[i:])
+	i = encodeVarintGenerated(data, i, uint64(m.ListMeta.Size()))
+	n6, err := m.ListMeta.MarshalTo(data[i:])
 	if err != nil {
 		return 0, err
 	}
 	i += n6
 	if len(m.Items) > 0 {
 		for _, msg := range m.Items {
-			dAtA[i] = 0x12
+			data[i] = 0x12
 			i++
-			i = encodeVarintGenerated(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+			i = encodeVarintGenerated(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
 			if err != nil {
 				return 0, err
 			}
@@ -220,27 +218,27 @@ func (m *ClusterList) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *ClusterSpec) Marshal() (dAtA []byte, err error) {
+func (m *ClusterSpec) Marshal() (data []byte, err error) {
 	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
 	if err != nil {
 		return nil, err
 	}
-	return dAtA[:n], nil
+	return data[:n], nil
 }
 
-func (m *ClusterSpec) MarshalTo(dAtA []byte) (int, error) {
+func (m *ClusterSpec) MarshalTo(data []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
 	if len(m.ServerAddressByClientCIDRs) > 0 {
 		for _, msg := range m.ServerAddressByClientCIDRs {
-			dAtA[i] = 0xa
+			data[i] = 0xa
 			i++
-			i = encodeVarintGenerated(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+			i = encodeVarintGenerated(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
 			if err != nil {
 				return 0, err
 			}
@@ -248,10 +246,10 @@ func (m *ClusterSpec) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.SecretRef != nil {
-		dAtA[i] = 0x12
+		data[i] = 0x12
 		i++
-		i = encodeVarintGenerated(dAtA, i, uint64(m.SecretRef.Size()))
-		n7, err := m.SecretRef.MarshalTo(dAtA[i:])
+		i = encodeVarintGenerated(data, i, uint64(m.SecretRef.Size()))
+		n7, err := m.SecretRef.MarshalTo(data[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -260,27 +258,27 @@ func (m *ClusterSpec) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *ClusterStatus) Marshal() (dAtA []byte, err error) {
+func (m *ClusterStatus) Marshal() (data []byte, err error) {
 	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
 	if err != nil {
 		return nil, err
 	}
-	return dAtA[:n], nil
+	return data[:n], nil
 }
 
-func (m *ClusterStatus) MarshalTo(dAtA []byte) (int, error) {
+func (m *ClusterStatus) MarshalTo(data []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
 	if len(m.Conditions) > 0 {
 		for _, msg := range m.Conditions {
-			dAtA[i] = 0xa
+			data[i] = 0xa
 			i++
-			i = encodeVarintGenerated(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+			i = encodeVarintGenerated(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
 			if err != nil {
 				return 0, err
 			}
@@ -289,77 +287,77 @@ func (m *ClusterStatus) MarshalTo(dAtA []byte) (int, error) {
 	}
 	if len(m.Zones) > 0 {
 		for _, s := range m.Zones {
-			dAtA[i] = 0x2a
+			data[i] = 0x2a
 			i++
 			l = len(s)
 			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				data[i] = uint8(uint64(l)&0x7f | 0x80)
 				l >>= 7
 				i++
 			}
-			dAtA[i] = uint8(l)
+			data[i] = uint8(l)
 			i++
-			i += copy(dAtA[i:], s)
+			i += copy(data[i:], s)
 		}
 	}
-	dAtA[i] = 0x32
+	data[i] = 0x32
 	i++
-	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Region)))
-	i += copy(dAtA[i:], m.Region)
+	i = encodeVarintGenerated(data, i, uint64(len(m.Region)))
+	i += copy(data[i:], m.Region)
 	return i, nil
 }
 
-func (m *ServerAddressByClientCIDR) Marshal() (dAtA []byte, err error) {
+func (m *ServerAddressByClientCIDR) Marshal() (data []byte, err error) {
 	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
 	if err != nil {
 		return nil, err
 	}
-	return dAtA[:n], nil
+	return data[:n], nil
 }
 
-func (m *ServerAddressByClientCIDR) MarshalTo(dAtA []byte) (int, error) {
+func (m *ServerAddressByClientCIDR) MarshalTo(data []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	dAtA[i] = 0xa
+	data[i] = 0xa
 	i++
-	i = encodeVarintGenerated(dAtA, i, uint64(len(m.ClientCIDR)))
-	i += copy(dAtA[i:], m.ClientCIDR)
-	dAtA[i] = 0x12
+	i = encodeVarintGenerated(data, i, uint64(len(m.ClientCIDR)))
+	i += copy(data[i:], m.ClientCIDR)
+	data[i] = 0x12
 	i++
-	i = encodeVarintGenerated(dAtA, i, uint64(len(m.ServerAddress)))
-	i += copy(dAtA[i:], m.ServerAddress)
+	i = encodeVarintGenerated(data, i, uint64(len(m.ServerAddress)))
+	i += copy(data[i:], m.ServerAddress)
 	return i, nil
 }
 
-func encodeFixed64Generated(dAtA []byte, offset int, v uint64) int {
-	dAtA[offset] = uint8(v)
-	dAtA[offset+1] = uint8(v >> 8)
-	dAtA[offset+2] = uint8(v >> 16)
-	dAtA[offset+3] = uint8(v >> 24)
-	dAtA[offset+4] = uint8(v >> 32)
-	dAtA[offset+5] = uint8(v >> 40)
-	dAtA[offset+6] = uint8(v >> 48)
-	dAtA[offset+7] = uint8(v >> 56)
+func encodeFixed64Generated(data []byte, offset int, v uint64) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	data[offset+4] = uint8(v >> 32)
+	data[offset+5] = uint8(v >> 40)
+	data[offset+6] = uint8(v >> 48)
+	data[offset+7] = uint8(v >> 56)
 	return offset + 8
 }
-func encodeFixed32Generated(dAtA []byte, offset int, v uint32) int {
-	dAtA[offset] = uint8(v)
-	dAtA[offset+1] = uint8(v >> 8)
-	dAtA[offset+2] = uint8(v >> 16)
-	dAtA[offset+3] = uint8(v >> 24)
+func encodeFixed32Generated(data []byte, offset int, v uint32) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
 	return offset + 4
 }
-func encodeVarintGenerated(dAtA []byte, offset int, v uint64) int {
+func encodeVarintGenerated(data []byte, offset int, v uint64) int {
 	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
+		data[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
-	dAtA[offset] = uint8(v)
+	data[offset] = uint8(v)
 	return offset + 1
 }
 func (m *Cluster) Size() (n int) {
@@ -545,8 +543,8 @@ func valueToStringGenerated(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
-func (m *Cluster) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
+func (m *Cluster) Unmarshal(data []byte) error {
+	l := len(data)
 	iNdEx := 0
 	for iNdEx < l {
 		preIndex := iNdEx
@@ -558,7 +556,7 @@ func (m *Cluster) Unmarshal(dAtA []byte) error {
 			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
 			}
-			b := dAtA[iNdEx]
+			b := data[iNdEx]
 			iNdEx++
 			wire |= (uint64(b) & 0x7F) << shift
 			if b < 0x80 {
@@ -586,7 +584,7 @@ func (m *Cluster) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				msglen |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -600,7 +598,7 @@ func (m *Cluster) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.ObjectMeta.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.ObjectMeta.Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -616,7 +614,7 @@ func (m *Cluster) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				msglen |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -630,7 +628,7 @@ func (m *Cluster) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Spec.Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -646,7 +644,7 @@ func (m *Cluster) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				msglen |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -660,13 +658,13 @@ func (m *Cluster) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.Status.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Status.Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
-			skippy, err := skipGenerated(dAtA[iNdEx:])
+			skippy, err := skipGenerated(data[iNdEx:])
 			if err != nil {
 				return err
 			}
@@ -685,8 +683,8 @@ func (m *Cluster) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *ClusterCondition) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
+func (m *ClusterCondition) Unmarshal(data []byte) error {
+	l := len(data)
 	iNdEx := 0
 	for iNdEx < l {
 		preIndex := iNdEx
@@ -698,7 +696,7 @@ func (m *ClusterCondition) Unmarshal(dAtA []byte) error {
 			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
 			}
-			b := dAtA[iNdEx]
+			b := data[iNdEx]
 			iNdEx++
 			wire |= (uint64(b) & 0x7F) << shift
 			if b < 0x80 {
@@ -726,7 +724,7 @@ func (m *ClusterCondition) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				stringLen |= (uint64(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -741,7 +739,7 @@ func (m *ClusterCondition) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Type = ClusterConditionType(dAtA[iNdEx:postIndex])
+			m.Type = ClusterConditionType(data[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
@@ -755,7 +753,7 @@ func (m *ClusterCondition) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				stringLen |= (uint64(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -770,7 +768,7 @@ func (m *ClusterCondition) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Status = k8s_io_kubernetes_pkg_api_v1.ConditionStatus(dAtA[iNdEx:postIndex])
+			m.Status = k8s_io_kubernetes_pkg_api_v1.ConditionStatus(data[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
@@ -784,7 +782,7 @@ func (m *ClusterCondition) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				msglen |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -798,7 +796,7 @@ func (m *ClusterCondition) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.LastProbeTime.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.LastProbeTime.Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -814,7 +812,7 @@ func (m *ClusterCondition) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				msglen |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -828,7 +826,7 @@ func (m *ClusterCondition) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.LastTransitionTime.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.LastTransitionTime.Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -844,7 +842,7 @@ func (m *ClusterCondition) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				stringLen |= (uint64(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -859,7 +857,7 @@ func (m *ClusterCondition) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Reason = string(dAtA[iNdEx:postIndex])
+			m.Reason = string(data[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {
@@ -873,7 +871,7 @@ func (m *ClusterCondition) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				stringLen |= (uint64(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -888,11 +886,11 @@ func (m *ClusterCondition) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Message = string(dAtA[iNdEx:postIndex])
+			m.Message = string(data[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
-			skippy, err := skipGenerated(dAtA[iNdEx:])
+			skippy, err := skipGenerated(data[iNdEx:])
 			if err != nil {
 				return err
 			}
@@ -911,8 +909,8 @@ func (m *ClusterCondition) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *ClusterList) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
+func (m *ClusterList) Unmarshal(data []byte) error {
+	l := len(data)
 	iNdEx := 0
 	for iNdEx < l {
 		preIndex := iNdEx
@@ -924,7 +922,7 @@ func (m *ClusterList) Unmarshal(dAtA []byte) error {
 			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
 			}
-			b := dAtA[iNdEx]
+			b := data[iNdEx]
 			iNdEx++
 			wire |= (uint64(b) & 0x7F) << shift
 			if b < 0x80 {
@@ -952,7 +950,7 @@ func (m *ClusterList) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				msglen |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -966,7 +964,7 @@ func (m *ClusterList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.ListMeta.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.ListMeta.Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -982,7 +980,7 @@ func (m *ClusterList) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				msglen |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -997,13 +995,13 @@ func (m *ClusterList) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Items = append(m.Items, Cluster{})
-			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Items[len(m.Items)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
-			skippy, err := skipGenerated(dAtA[iNdEx:])
+			skippy, err := skipGenerated(data[iNdEx:])
 			if err != nil {
 				return err
 			}
@@ -1022,8 +1020,8 @@ func (m *ClusterList) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *ClusterSpec) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
+func (m *ClusterSpec) Unmarshal(data []byte) error {
+	l := len(data)
 	iNdEx := 0
 	for iNdEx < l {
 		preIndex := iNdEx
@@ -1035,7 +1033,7 @@ func (m *ClusterSpec) Unmarshal(dAtA []byte) error {
 			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
 			}
-			b := dAtA[iNdEx]
+			b := data[iNdEx]
 			iNdEx++
 			wire |= (uint64(b) & 0x7F) << shift
 			if b < 0x80 {
@@ -1063,7 +1061,7 @@ func (m *ClusterSpec) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				msglen |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -1078,7 +1076,7 @@ func (m *ClusterSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.ServerAddressByClientCIDRs = append(m.ServerAddressByClientCIDRs, ServerAddressByClientCIDR{})
-			if err := m.ServerAddressByClientCIDRs[len(m.ServerAddressByClientCIDRs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.ServerAddressByClientCIDRs[len(m.ServerAddressByClientCIDRs)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1094,7 +1092,7 @@ func (m *ClusterSpec) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				msglen |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -1111,13 +1109,13 @@ func (m *ClusterSpec) Unmarshal(dAtA []byte) error {
 			if m.SecretRef == nil {
 				m.SecretRef = &k8s_io_kubernetes_pkg_api_v1.LocalObjectReference{}
 			}
-			if err := m.SecretRef.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.SecretRef.Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
-			skippy, err := skipGenerated(dAtA[iNdEx:])
+			skippy, err := skipGenerated(data[iNdEx:])
 			if err != nil {
 				return err
 			}
@@ -1136,8 +1134,8 @@ func (m *ClusterSpec) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *ClusterStatus) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
+func (m *ClusterStatus) Unmarshal(data []byte) error {
+	l := len(data)
 	iNdEx := 0
 	for iNdEx < l {
 		preIndex := iNdEx
@@ -1149,7 +1147,7 @@ func (m *ClusterStatus) Unmarshal(dAtA []byte) error {
 			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
 			}
-			b := dAtA[iNdEx]
+			b := data[iNdEx]
 			iNdEx++
 			wire |= (uint64(b) & 0x7F) << shift
 			if b < 0x80 {
@@ -1177,7 +1175,7 @@ func (m *ClusterStatus) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				msglen |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -1192,7 +1190,7 @@ func (m *ClusterStatus) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Conditions = append(m.Conditions, ClusterCondition{})
-			if err := m.Conditions[len(m.Conditions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Conditions[len(m.Conditions)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1208,7 +1206,7 @@ func (m *ClusterStatus) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				stringLen |= (uint64(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -1223,7 +1221,7 @@ func (m *ClusterStatus) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Zones = append(m.Zones, string(dAtA[iNdEx:postIndex]))
+			m.Zones = append(m.Zones, string(data[iNdEx:postIndex]))
 			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {
@@ -1237,7 +1235,7 @@ func (m *ClusterStatus) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				stringLen |= (uint64(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -1252,11 +1250,11 @@ func (m *ClusterStatus) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Region = string(dAtA[iNdEx:postIndex])
+			m.Region = string(data[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
-			skippy, err := skipGenerated(dAtA[iNdEx:])
+			skippy, err := skipGenerated(data[iNdEx:])
 			if err != nil {
 				return err
 			}
@@ -1275,8 +1273,8 @@ func (m *ClusterStatus) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *ServerAddressByClientCIDR) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
+func (m *ServerAddressByClientCIDR) Unmarshal(data []byte) error {
+	l := len(data)
 	iNdEx := 0
 	for iNdEx < l {
 		preIndex := iNdEx
@@ -1288,7 +1286,7 @@ func (m *ServerAddressByClientCIDR) Unmarshal(dAtA []byte) error {
 			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
 			}
-			b := dAtA[iNdEx]
+			b := data[iNdEx]
 			iNdEx++
 			wire |= (uint64(b) & 0x7F) << shift
 			if b < 0x80 {
@@ -1316,7 +1314,7 @@ func (m *ServerAddressByClientCIDR) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				stringLen |= (uint64(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -1331,7 +1329,7 @@ func (m *ServerAddressByClientCIDR) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ClientCIDR = string(dAtA[iNdEx:postIndex])
+			m.ClientCIDR = string(data[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
@@ -1345,7 +1343,7 @@ func (m *ServerAddressByClientCIDR) Unmarshal(dAtA []byte) error {
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				stringLen |= (uint64(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -1360,11 +1358,11 @@ func (m *ServerAddressByClientCIDR) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ServerAddress = string(dAtA[iNdEx:postIndex])
+			m.ServerAddress = string(data[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
-			skippy, err := skipGenerated(dAtA[iNdEx:])
+			skippy, err := skipGenerated(data[iNdEx:])
 			if err != nil {
 				return err
 			}
@@ -1383,8 +1381,8 @@ func (m *ServerAddressByClientCIDR) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func skipGenerated(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
+func skipGenerated(data []byte) (n int, err error) {
+	l := len(data)
 	iNdEx := 0
 	for iNdEx < l {
 		var wire uint64
@@ -1395,7 +1393,7 @@ func skipGenerated(dAtA []byte) (n int, err error) {
 			if iNdEx >= l {
 				return 0, io.ErrUnexpectedEOF
 			}
-			b := dAtA[iNdEx]
+			b := data[iNdEx]
 			iNdEx++
 			wire |= (uint64(b) & 0x7F) << shift
 			if b < 0x80 {
@@ -1413,7 +1411,7 @@ func skipGenerated(dAtA []byte) (n int, err error) {
 					return 0, io.ErrUnexpectedEOF
 				}
 				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
+				if data[iNdEx-1] < 0x80 {
 					break
 				}
 			}
@@ -1430,7 +1428,7 @@ func skipGenerated(dAtA []byte) (n int, err error) {
 				if iNdEx >= l {
 					return 0, io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
+				b := data[iNdEx]
 				iNdEx++
 				length |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
@@ -1453,7 +1451,7 @@ func skipGenerated(dAtA []byte) (n int, err error) {
 					if iNdEx >= l {
 						return 0, io.ErrUnexpectedEOF
 					}
-					b := dAtA[iNdEx]
+					b := data[iNdEx]
 					iNdEx++
 					innerWire |= (uint64(b) & 0x7F) << shift
 					if b < 0x80 {
@@ -1464,7 +1462,7 @@ func skipGenerated(dAtA []byte) (n int, err error) {
 				if innerWireType == 4 {
 					break
 				}
-				next, err := skipGenerated(dAtA[start:])
+				next, err := skipGenerated(data[start:])
 				if err != nil {
 					return 0, err
 				}
@@ -1487,10 +1485,6 @@ var (
 	ErrInvalidLengthGenerated = fmt.Errorf("proto: negative length found during unmarshaling")
 	ErrIntOverflowGenerated   = fmt.Errorf("proto: integer overflow")
 )
-
-func init() {
-	proto.RegisterFile("k8s.io/kubernetes/federation/apis/federation/v1beta1/generated.proto", fileDescriptorGenerated)
-}
 
 var fileDescriptorGenerated = []byte{
 	// 809 bytes of a gzipped FileDescriptorProto

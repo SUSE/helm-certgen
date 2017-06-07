@@ -25,7 +25,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/kubernetes/pkg/api"
-	"k8s.io/kubernetes/pkg/api/pod"
 	"k8s.io/kubernetes/pkg/apis/apps"
 	"k8s.io/kubernetes/pkg/apis/batch"
 	"k8s.io/kubernetes/pkg/apis/extensions"
@@ -193,7 +192,7 @@ func PodRunningAndReady(event watch.Event) (bool, error) {
 		case api.PodFailed, api.PodSucceeded:
 			return false, ErrPodCompleted
 		case api.PodRunning:
-			return pod.IsPodReady(t), nil
+			return api.IsPodReady(t), nil
 		}
 	}
 	return false, nil

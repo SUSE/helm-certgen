@@ -197,8 +197,6 @@ type ObjectMeta struct {
 	// then an entry in this list will point to this controller, with the controller field set to true.
 	// There cannot be more than one managing controller.
 	// +optional
-	// +patchMergeKey=uid
-	// +patchStrategy=merge
 	OwnerReferences []metav1.OwnerReference `json:"ownerReferences,omitempty" patchStrategy:"merge" patchMergeKey:"uid" protobuf:"bytes,13,rep,name=ownerReferences"`
 
 	// Must be empty before the object is deleted from the registry. Each entry
@@ -206,7 +204,6 @@ type ObjectMeta struct {
 	// from the list. If the deletionTimestamp of the object is non-nil, entries
 	// in this list can only be removed.
 	// +optional
-	// +patchStrategy=merge
 	Finalizers []string `json:"finalizers,omitempty" patchStrategy:"merge" protobuf:"bytes,14,rep,name=finalizers"`
 
 	// The name of the cluster which the object belongs to.
@@ -431,12 +428,14 @@ type PersistentVolumeSource struct {
 }
 
 const (
+	// AlphaStorageClassAnnotation represents the previous alpha storage class
+	// annotation.  It's currently still used and will be held for backwards
+	// compatibility
+	AlphaStorageClassAnnotation = "volume.alpha.kubernetes.io/storage-class"
+
 	// BetaStorageClassAnnotation represents the beta/previous StorageClass annotation.
 	// It's currently still used and will be held for backwards compatibility
 	BetaStorageClassAnnotation = "volume.beta.kubernetes.io/storage-class"
-
-	// MountOptionAnnotation defines mount option annotation used in PVs
-	MountOptionAnnotation = "volume.beta.kubernetes.io/mount-options"
 )
 
 // +genclient=true
@@ -1048,15 +1047,6 @@ type ISCSIVolumeSource struct {
 	// is other than default (typically TCP ports 860 and 3260).
 	// +optional
 	Portals []string `json:"portals,omitempty" protobuf:"bytes,7,opt,name=portals"`
-	// whether support iSCSI Discovery CHAP authentication
-	// +optional
-	DiscoveryCHAPAuth bool `json:"chapAuthDiscovery,omitempty" protobuf:"varint,8,opt,name=chapAuthDiscovery"`
-	// whether support iSCSI Session CHAP authentication
-	// +optional
-	SessionCHAPAuth bool `json:"chapAuthSession,omitempty" protobuf:"varint,11,opt,name=chapAuthSession"`
-	// CHAP secret for iSCSI target and initiator authentication
-	// +optional
-	SecretRef *LocalObjectReference `json:"secretRef,omitempty" protobuf:"bytes,10,opt,name=secretRef"`
 }
 
 // Represents a Fibre Channel volume.
@@ -1359,7 +1349,7 @@ type EnvVar struct {
 // EnvVarSource represents a source for the value of an EnvVar.
 type EnvVarSource struct {
 	// Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations,
-	// spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP.
+	// spec.nodeName, spec.serviceAccountName, status.podIP.
 	// +optional
 	FieldRef *ObjectFieldSelector `json:"fieldRef,omitempty" protobuf:"bytes,1,opt,name=fieldRef"`
 	// Selects a resource of the container: only resources limits and requests
@@ -1502,9 +1492,6 @@ type TCPSocketAction struct {
 	// Number must be in the range 1 to 65535.
 	// Name must be an IANA_SVC_NAME.
 	Port intstr.IntOrString `json:"port" protobuf:"bytes,1,opt,name=port"`
-	// Optional: Host name to connect to, defaults to the pod IP.
-	// +optional
-	Host string `json:"host,omitempty" protobuf:"bytes,2,opt,name=host"`
 }
 
 // ExecAction describes a "run in container" action.
@@ -1647,8 +1634,6 @@ type Container struct {
 	// accessible from the network.
 	// Cannot be updated.
 	// +optional
-	// +patchMergeKey=containerPort
-	// +patchStrategy=merge
 	Ports []ContainerPort `json:"ports,omitempty" patchStrategy:"merge" patchMergeKey:"containerPort" protobuf:"bytes,6,rep,name=ports"`
 	// List of sources to populate environment variables in the container.
 	// The keys defined within a source must be a C_IDENTIFIER. All invalid keys
@@ -1661,8 +1646,6 @@ type Container struct {
 	// List of environment variables to set in the container.
 	// Cannot be updated.
 	// +optional
-	// +patchMergeKey=name
-	// +patchStrategy=merge
 	Env []EnvVar `json:"env,omitempty" patchStrategy:"merge" patchMergeKey:"name" protobuf:"bytes,7,rep,name=env"`
 	// Compute Resources required by this container.
 	// Cannot be updated.
@@ -1672,8 +1655,6 @@ type Container struct {
 	// Pod volumes to mount into the container's filesystem.
 	// Cannot be updated.
 	// +optional
-	// +patchMergeKey=mountPath
-	// +patchStrategy=merge
 	VolumeMounts []VolumeMount `json:"volumeMounts,omitempty" patchStrategy:"merge" patchMergeKey:"mountPath" protobuf:"bytes,9,rep,name=volumeMounts"`
 	// Periodic probe of container liveness.
 	// Container will be restarted if the probe fails.
@@ -1994,8 +1975,6 @@ type NodeSelectorTerm struct {
 // that relates the key and values.
 type NodeSelectorRequirement struct {
 	// The label key that the selector applies to.
-	// +patchMergeKey=key
-	// +patchStrategy=merge
 	Key string `json:"key" patchStrategy:"merge" patchMergeKey:"key" protobuf:"bytes,1,opt,name=key"`
 	// Represents a key's relationship to a set of values.
 	// Valid operators are In, NotIn, Exists, DoesNotExist. Gt, and Lt.
@@ -2180,8 +2159,6 @@ type PreferredSchedulingTerm struct {
 // any pod that that does not tolerate the Taint.
 type Taint struct {
 	// Required. The taint key to be applied to a node.
-	// +patchMergeKey=key
-	// +patchStrategy=merge
 	Key string `json:"key" patchStrategy:"merge" patchMergeKey:"key" protobuf:"bytes,1,opt,name=key"`
 	// Required. The taint value corresponding to the taint key.
 	// +optional
@@ -2224,8 +2201,6 @@ type Toleration struct {
 	// Key is the taint key that the toleration applies to. Empty means match all taint keys.
 	// If the key is empty, operator must be Exists; this combination means to match all values and all keys.
 	// +optional
-	// +patchMergeKey=key
-	// +patchStrategy=merge
 	Key string `json:"key,omitempty" patchStrategy:"merge" patchMergeKey:"key" protobuf:"bytes,1,opt,name=key"`
 	// Operator represents a key's relationship to the value.
 	// Valid operators are Exists and Equal. Defaults to Equal.
@@ -2283,8 +2258,6 @@ type PodSpec struct {
 	// List of volumes that can be mounted by containers belonging to the pod.
 	// More info: http://kubernetes.io/docs/user-guide/volumes
 	// +optional
-	// +patchMergeKey=name
-	// +patchStrategy=merge
 	Volumes []Volume `json:"volumes,omitempty" patchStrategy:"merge" patchMergeKey:"name" protobuf:"bytes,1,rep,name=volumes"`
 	// List of initialization containers belonging to the pod.
 	// Init containers are executed in order prior to containers being started. If any
@@ -2299,16 +2272,12 @@ type PodSpec struct {
 	// Init containers cannot currently be added or removed.
 	// Cannot be updated.
 	// More info: http://kubernetes.io/docs/user-guide/containers
-	// +patchMergeKey=name
-	// +patchStrategy=merge
 	InitContainers []Container `json:"initContainers,omitempty" patchStrategy:"merge" patchMergeKey:"name" protobuf:"bytes,20,rep,name=initContainers"`
 	// List of containers belonging to the pod.
 	// Containers cannot currently be added or removed.
 	// There must be at least one container in a Pod.
 	// Cannot be updated.
 	// More info: http://kubernetes.io/docs/user-guide/containers
-	// +patchMergeKey=name
-	// +patchStrategy=merge
 	Containers []Container `json:"containers" patchStrategy:"merge" patchMergeKey:"name" protobuf:"bytes,2,rep,name=containers"`
 	// Restart policy for all containers within the pod.
 	// One of Always, OnFailure, Never.
@@ -2338,7 +2307,7 @@ type PodSpec struct {
 	DNSPolicy DNSPolicy `json:"dnsPolicy,omitempty" protobuf:"bytes,6,opt,name=dnsPolicy,casttype=DNSPolicy"`
 	// NodeSelector is a selector which must be true for the pod to fit on a node.
 	// Selector which must match a node's labels for the pod to be scheduled on that node.
-	// More info: http://kubernetes.io/docs/user-guide/node-selection/README.md
+	// More info: http://kubernetes.io/docs/user-guide/node-selection/README
 	// +optional
 	NodeSelector map[string]string `json:"nodeSelector,omitempty" protobuf:"bytes,7,rep,name=nodeSelector"`
 
@@ -2385,8 +2354,6 @@ type PodSpec struct {
 	// in the case of docker, only DockerConfig type secrets are honored.
 	// More info: http://kubernetes.io/docs/user-guide/images#specifying-imagepullsecrets-on-a-pod
 	// +optional
-	// +patchMergeKey=name
-	// +patchStrategy=merge
 	ImagePullSecrets []LocalObjectReference `json:"imagePullSecrets,omitempty" patchStrategy:"merge" patchMergeKey:"name" protobuf:"bytes,15,rep,name=imagePullSecrets"`
 	// Specifies the hostname of the Pod
 	// If not specified, the pod's hostname will be set to a system-defined value.
@@ -2406,21 +2373,6 @@ type PodSpec struct {
 	// If specified, the pod's tolerations.
 	// +optional
 	Tolerations []Toleration `json:"tolerations,omitempty" protobuf:"bytes,22,opt,name=tolerations"`
-	// HostAliases is an optional list of hosts and IPs that will be injected into the pod's hosts
-	// file if specified. This is only valid for non-hostNetwork pods.
-	// +optional
-	// +patchMergeKey=IP
-	// +patchStrategy=merge
-	HostAliases []HostAlias `json:"hostMappings,omitempty" patchStrategy:"merge" patchMergeKey:"IP" protobuf:"bytes,23,rep,name=hostMappings"`
-}
-
-// HostAlias holds the mapping between IP and hostnames that will be injected as an entry in the
-// pod's hosts file.
-type HostAlias struct {
-	// IP address of the host file entry.
-	IP string `json:"ip,omitempty" protobuf:"bytes,1,opt,name=ip"`
-	// Hostnames for the the above IP address.
-	Hostnames []string `json:"hostnames,omitempty" protobuf:"bytes,2,rep,name=hostnames"`
 }
 
 // PodSecurityContext holds pod-level security attributes and common container settings.
@@ -2440,7 +2392,7 @@ type PodSecurityContext struct {
 	// PodSecurityContext, the value specified in SecurityContext takes precedence
 	// for that container.
 	// +optional
-	RunAsUser *types.UnixUserID `json:"runAsUser,omitempty" protobuf:"varint,2,opt,name=runAsUser,casttype=k8s.io/apimachinery/pkg/types.UnixUserID"`
+	RunAsUser *int64 `json:"runAsUser,omitempty" protobuf:"varint,2,opt,name=runAsUser"`
 	// Indicates that the container must run as a non-root user.
 	// If true, the Kubelet will validate the image at runtime to ensure that it
 	// does not run as UID 0 (root) and fail to start the container if it does.
@@ -2453,7 +2405,7 @@ type PodSecurityContext struct {
 	// to the container's primary GID.  If unspecified, no groups will be added to
 	// any container.
 	// +optional
-	SupplementalGroups []types.UnixGroupID `json:"supplementalGroups,omitempty" protobuf:"varint,4,rep,name=supplementalGroups,casttype=k8s.io/apimachinery/pkg/types.UnixGroupID"`
+	SupplementalGroups []int64 `json:"supplementalGroups,omitempty" protobuf:"varint,4,rep,name=supplementalGroups"`
 	// A special supplemental group that applies to all containers in a pod.
 	// Some volume types allow the Kubelet to change the ownership of that volume
 	// to be owned by the pod:
@@ -2464,7 +2416,7 @@ type PodSecurityContext struct {
 	//
 	// If unset, the Kubelet will not modify the ownership and permissions of any volume.
 	// +optional
-	FSGroup *types.UnixGroupID `json:"fsGroup,omitempty" protobuf:"varint,5,opt,name=fsGroup,casttype=k8s.io/apimachinery/pkg/types.UnixGroupID"`
+	FSGroup *int64 `json:"fsGroup,omitempty" protobuf:"varint,5,opt,name=fsGroup"`
 }
 
 // PodQOSClass defines the supported qos classes of Pods.
@@ -2489,8 +2441,6 @@ type PodStatus struct {
 	// Current service state of pod.
 	// More info: http://kubernetes.io/docs/user-guide/pod-states#pod-conditions
 	// +optional
-	// +patchMergeKey=type
-	// +patchStrategy=merge
 	Conditions []PodCondition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,2,rep,name=conditions"`
 	// A human readable message indicating details about why the pod is in this condition.
 	// +optional
@@ -2687,8 +2637,6 @@ type ReplicationControllerStatus struct {
 
 	// Represents the latest available observations of a replication controller's current state.
 	// +optional
-	// +patchMergeKey=type
-	// +patchStrategy=merge
 	Conditions []ReplicationControllerCondition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,6,rep,name=conditions"`
 }
 
@@ -2792,16 +2740,6 @@ const (
 	ServiceTypeExternalName ServiceType = "ExternalName"
 )
 
-// Service External Traffic Policy Type string
-type ServiceExternalTrafficPolicyType string
-
-const (
-	// ServiceExternalTrafficPolicyTypeLocal specifies local endpoints behavior.
-	ServiceExternalTrafficPolicyTypeLocal ServiceExternalTrafficPolicyType = "Local"
-	// ServiceExternalTrafficPolicyTypeGlobal specifies global (legacy) behavior.
-	ServiceExternalTrafficPolicyTypeGlobal ServiceExternalTrafficPolicyType = "Global"
-)
-
 // ServiceStatus represents the current status of a service.
 type ServiceStatus struct {
 	// LoadBalancer contains the current status of the load-balancer,
@@ -2836,8 +2774,6 @@ type LoadBalancerIngress struct {
 type ServiceSpec struct {
 	// The list of ports that are exposed by this service.
 	// More info: http://kubernetes.io/docs/user-guide/services#virtual-ips-and-service-proxies
-	// +patchMergeKey=port
-	// +patchStrategy=merge
 	Ports []ServicePort `json:"ports,omitempty" patchStrategy:"merge" patchMergeKey:"port" protobuf:"bytes,1,rep,name=ports"`
 
 	// Route service traffic to pods with label keys and values matching this
@@ -2882,9 +2818,20 @@ type ServiceSpec struct {
 	// will also accept traffic for this service.  These IPs are not managed by
 	// Kubernetes.  The user is responsible for ensuring that traffic arrives
 	// at a node with this IP.  A common example is external load-balancers
-	// that are not part of the Kubernetes system.
+	// that are not part of the Kubernetes system.  A previous form of this
+	// functionality exists as the deprecatedPublicIPs field.  When using this
+	// field, callers should also clear the deprecatedPublicIPs field.
 	// +optional
 	ExternalIPs []string `json:"externalIPs,omitempty" protobuf:"bytes,5,rep,name=externalIPs"`
+
+	// deprecatedPublicIPs is deprecated and replaced by the externalIPs field
+	// with almost the exact same semantics.  This field is retained in the v1
+	// API for compatibility until at least 8/20/2016.  It will be removed from
+	// any new API revisions.  If both deprecatedPublicIPs *and* externalIPs are
+	// set, deprecatedPublicIPs is used.
+	// +k8s:conversion-gen=false
+	// +optional
+	DeprecatedPublicIPs []string `json:"deprecatedPublicIPs,omitempty" protobuf:"bytes,6,rep,name=deprecatedPublicIPs"`
 
 	// Supports "ClientIP" and "None". Used to maintain session affinity.
 	// Enable client IP based session affinity.
@@ -2914,20 +2861,6 @@ type ServiceSpec struct {
 	// Must be a valid DNS name and requires Type to be ExternalName.
 	// +optional
 	ExternalName string `json:"externalName,omitempty" protobuf:"bytes,10,opt,name=externalName"`
-
-	// externalTrafficPolicy denotes if this Service desires to route external traffic to
-	// local endpoints only. This preserves Source IP and avoids a second hop for
-	// LoadBalancer and Nodeport type services.
-	// +optional
-	ExternalTrafficPolicy ServiceExternalTrafficPolicyType `json:"externalTrafficPolicy,omitempty" protobuf:"bytes,11,opt,name=externalTrafficPolicy"`
-
-	// healthCheckNodePort specifies the healthcheck nodePort for the service.
-	// If not specified, HealthCheckNodePort is created by the service api
-	// backend with the allocated nodePort. Will use user-specified nodePort value
-	// if specified by the client. Only effects when Type is set to LoadBalancer
-	// and ExternalTrafficPolicy is set to Local.
-	// +optional
-	HealthCheckNodePort int32 `json:"healthCheckNodePort,omitempty" protobuf:"bytes,12,opt,name=healthCheckNodePort"`
 }
 
 // ServicePort contains information on service's port.
@@ -3026,8 +2959,6 @@ type ServiceAccount struct {
 	// Secrets is the list of secrets allowed to be used by pods running using this ServiceAccount.
 	// More info: http://kubernetes.io/docs/user-guide/secrets
 	// +optional
-	// +patchMergeKey=name
-	// +patchStrategy=merge
 	Secrets []ObjectReference `json:"secrets,omitempty" patchStrategy:"merge" patchMergeKey:"name" protobuf:"bytes,2,rep,name=secrets"`
 
 	// ImagePullSecrets is a list of references to secrets in the same namespace to use for pulling any images
@@ -3248,15 +3179,11 @@ type NodeStatus struct {
 	// Conditions is an array of current observed node conditions.
 	// More info: http://releases.k8s.io/HEAD/docs/admin/node.md#node-condition
 	// +optional
-	// +patchMergeKey=type
-	// +patchStrategy=merge
 	Conditions []NodeCondition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,4,rep,name=conditions"`
 	// List of addresses reachable to the node.
 	// Queried from cloud provider, if available.
 	// More info: http://releases.k8s.io/HEAD/docs/admin/node.md#node-addresses
 	// +optional
-	// +patchMergeKey=type
-	// +patchStrategy=merge
 	Addresses []NodeAddress `json:"addresses,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,5,rep,name=addresses"`
 	// Endpoints of daemons running on the Node.
 	// +optional
@@ -3387,11 +3314,13 @@ type NodeAddressType string
 
 // These are valid address type of node.
 const (
-	NodeHostName    NodeAddressType = "Hostname"
-	NodeExternalIP  NodeAddressType = "ExternalIP"
-	NodeInternalIP  NodeAddressType = "InternalIP"
-	NodeExternalDNS NodeAddressType = "ExternalDNS"
-	NodeInternalDNS NodeAddressType = "InternalDNS"
+	// Deprecated: NodeLegacyHostIP will be removed in 1.7.
+	NodeLegacyHostIP NodeAddressType = "LegacyHostIP"
+	NodeHostName     NodeAddressType = "Hostname"
+	NodeExternalIP   NodeAddressType = "ExternalIP"
+	NodeInternalIP   NodeAddressType = "InternalIP"
+	NodeExternalDNS  NodeAddressType = "ExternalDNS"
+	NodeInternalDNS  NodeAddressType = "InternalDNS"
 )
 
 // NodeAddress contains information for the node's address.
@@ -4120,10 +4049,11 @@ type Secret struct {
 	// +optional
 	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
 
-	// Data contains the secret data. Each key must consist of alphanumeric
-	// characters, '-', '_' or '.'. The serialized form of the secret data is a
-	// base64 encoded string, representing the arbitrary (possibly non-string)
-	// data value here. Described in https://tools.ietf.org/html/rfc4648#section-4
+	// Data contains the secret data. Each key must be a valid DNS_SUBDOMAIN
+	// or leading dot followed by valid DNS_SUBDOMAIN.
+	// The serialized form of the secret data is a base64 encoded string,
+	// representing the arbitrary (possibly non-string) data value here.
+	// Described in https://tools.ietf.org/html/rfc4648#section-4
 	// +optional
 	Data map[string][]byte `json:"data,omitempty" protobuf:"bytes,2,rep,name=data"`
 
@@ -4247,7 +4177,7 @@ type ConfigMap struct {
 	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
 
 	// Data contains the configuration data.
-	// Each key must consist of alphanumeric characters, '-', '_' or '.'.
+	// Each key must be a valid DNS_SUBDOMAIN with an optional leading dot.
 	// +optional
 	Data map[string]string `json:"data,omitempty" protobuf:"bytes,2,rep,name=data"`
 }
@@ -4303,8 +4233,6 @@ type ComponentStatus struct {
 
 	// List of component conditions observed
 	// +optional
-	// +patchMergeKey=type
-	// +patchStrategy=merge
 	Conditions []ComponentCondition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,2,rep,name=conditions"`
 }
 
@@ -4391,7 +4319,7 @@ type SecurityContext struct {
 	// May also be set in PodSecurityContext.  If set in both SecurityContext and
 	// PodSecurityContext, the value specified in SecurityContext takes precedence.
 	// +optional
-	RunAsUser *types.UnixUserID `json:"runAsUser,omitempty" protobuf:"varint,4,opt,name=runAsUser,casttype=k8s.io/apimachinery/pkg/types.UnixUserID"`
+	RunAsUser *int64 `json:"runAsUser,omitempty" protobuf:"varint,4,opt,name=runAsUser"`
 	// Indicates that the container must run as a non-root user.
 	// If true, the Kubelet will validate the image at runtime to ensure that it
 	// does not run as UID 0 (root) and fail to start the container if it does.
@@ -4449,53 +4377,4 @@ const (
 	// When the --failure-domains scheduler flag is not specified,
 	// DefaultFailureDomains defines the set of label keys used when TopologyKey is empty in PreferredDuringScheduling anti-affinity.
 	DefaultFailureDomains string = metav1.LabelHostname + "," + metav1.LabelZoneFailureDomain + "," + metav1.LabelZoneRegion
-)
-
-// Sysctl defines a kernel parameter to be set
-type Sysctl struct {
-	// Name of a property to set
-	Name string `protobuf:"bytes,1,opt,name=name"`
-	// Value of a property to set
-	Value string `protobuf:"bytes,2,opt,name=value"`
-}
-
-// NodeResources is an object for conveying resource information about a node.
-// see http://releases.k8s.io/HEAD/docs/design/resources.md for more details.
-type NodeResources struct {
-	// Capacity represents the available resources of a node
-	Capacity ResourceList `protobuf:"bytes,1,rep,name=capacity,casttype=ResourceList,castkey=ResourceName"`
-}
-
-const (
-	// Enable stdin for remote command execution
-	ExecStdinParam = "input"
-	// Enable stdout for remote command execution
-	ExecStdoutParam = "output"
-	// Enable stderr for remote command execution
-	ExecStderrParam = "error"
-	// Enable TTY for remote command execution
-	ExecTTYParam = "tty"
-	// Command to run for remote command execution
-	ExecCommandParamm = "command"
-
-	// Name of header that specifies stream type
-	StreamType = "streamType"
-	// Value for streamType header for stdin stream
-	StreamTypeStdin = "stdin"
-	// Value for streamType header for stdout stream
-	StreamTypeStdout = "stdout"
-	// Value for streamType header for stderr stream
-	StreamTypeStderr = "stderr"
-	// Value for streamType header for data stream
-	StreamTypeData = "data"
-	// Value for streamType header for error stream
-	StreamTypeError = "error"
-	// Value for streamType header for terminal resize stream
-	StreamTypeResize = "resize"
-
-	// Name of header that specifies the port being forwarded
-	PortHeader = "port"
-	// Name of header that specifies a request ID used to associate the error
-	// and data streams for a single forwarded connection
-	PortForwardRequestIDHeader = "requestID"
 )

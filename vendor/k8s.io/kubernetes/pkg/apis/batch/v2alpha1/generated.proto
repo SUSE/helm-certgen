@@ -39,12 +39,12 @@ message CronJob {
   // +optional
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
 
-  // Specification of the desired behavior of a cron job, including the schedule.
+  // Spec is a structure defining the expected behavior of a job, including the schedule.
   // More info: http://releases.k8s.io/HEAD/docs/devel/api-conventions.md#spec-and-status
   // +optional
   optional CronJobSpec spec = 2;
 
-  // Current status of a cron job.
+  // Status is a structure describing current status of a job.
   // More info: http://releases.k8s.io/HEAD/docs/devel/api-conventions.md#spec-and-status
   // +optional
   optional CronJobStatus status = 3;
@@ -52,18 +52,18 @@ message CronJob {
 
 // CronJobList is a collection of cron jobs.
 message CronJobList {
-  // Standard list metadata.
+  // Standard list metadata
   // More info: http://releases.k8s.io/HEAD/docs/devel/api-conventions.md#metadata
   // +optional
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
 
-  // items is the list of CronJobs.
+  // Items is the list of CronJob.
   repeated CronJob items = 2;
 }
 
 // CronJobSpec describes how the job execution will look like and when it will actually run.
 message CronJobSpec {
-  // The schedule in Cron format, see https://en.wikipedia.org/wiki/Cron.
+  // Schedule contains the schedule in Cron format, see https://en.wikipedia.org/wiki/Cron.
   optional string schedule = 1;
 
   // Optional deadline in seconds for starting the job if it misses scheduled
@@ -71,17 +71,18 @@ message CronJobSpec {
   // +optional
   optional int64 startingDeadlineSeconds = 2;
 
-  // Specifies how to treat concurrent executions of a Job.
+  // ConcurrencyPolicy specifies how to treat concurrent executions of a Job.
   // Defaults to Allow.
   // +optional
   optional string concurrencyPolicy = 3;
 
-  // This flag tells the controller to suspend subsequent executions, it does
+  // Suspend flag tells the controller to suspend subsequent executions, it does
   // not apply to already started executions.  Defaults to false.
   // +optional
   optional bool suspend = 4;
 
-  // Specifies the job that will be created when executing a CronJob.
+  // JobTemplate is the object that describes the job that will be created when
+  // executing a CronJob.
   optional JobTemplateSpec jobTemplate = 5;
 
   // The number of successful finished jobs to retain.
@@ -97,11 +98,11 @@ message CronJobSpec {
 
 // CronJobStatus represents the current state of a cron job.
 message CronJobStatus {
-  // A list of pointers to currently running jobs.
+  // Active holds pointers to currently running jobs.
   // +optional
   repeated k8s.io.kubernetes.pkg.api.v1.ObjectReference active = 1;
 
-  // Information when was the last time the job was successfully scheduled.
+  // LastScheduleTime keeps information of when was the last time the job was successfully scheduled.
   // +optional
   optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastScheduleTime = 4;
 }
@@ -113,7 +114,7 @@ message JobTemplate {
   // +optional
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
 
-  // Defines jobs that will be created from this template.
+  // Template defines jobs that will be created from this template
   // http://releases.k8s.io/HEAD/docs/devel/api-conventions.md#spec-and-status
   // +optional
   optional JobTemplateSpec template = 2;

@@ -109,12 +109,6 @@ type AuthInfo struct {
 	// Impersonate is the username to act-as.
 	// +optional
 	Impersonate string `json:"act-as,omitempty"`
-	// ImpersonateGroups is the groups to imperonate.
-	// +optional
-	ImpersonateGroups []string `json:"act-as-groups,omitempty"`
-	// ImpersonateUserExtra contains additional information for impersonated user.
-	// +optional
-	ImpersonateUserExtra map[string][]string `json:"act-as-user-extra,omitempty"`
 	// Username is the username for basic authentication to the kubernetes cluster.
 	// +optional
 	Username string `json:"username,omitempty"`
@@ -163,29 +157,22 @@ func NewConfig() *Config {
 	}
 }
 
-// NewContext is a convenience function that returns a new Context
-// object with non-nil maps
+// NewConfig is a convenience function that returns a new Config object with non-nil maps
 func NewContext() *Context {
 	return &Context{Extensions: make(map[string]runtime.Object)}
 }
 
-// NewCluster is a convenience function that returns a new Cluster
-// object with non-nil maps
+// NewConfig is a convenience function that returns a new Config object with non-nil maps
 func NewCluster() *Cluster {
 	return &Cluster{Extensions: make(map[string]runtime.Object)}
 }
 
-// NewAuthInfo is a convenience function that returns a new AuthInfo
-// object with non-nil maps
+// NewConfig is a convenience function that returns a new Config object with non-nil maps
 func NewAuthInfo() *AuthInfo {
-	return &AuthInfo{
-		Extensions:           make(map[string]runtime.Object),
-		ImpersonateUserExtra: make(map[string][]string),
-	}
+	return &AuthInfo{Extensions: make(map[string]runtime.Object)}
 }
 
-// NewPreferences is a convenience function that returns a new
-// Preferences object with non-nil maps
+// NewConfig is a convenience function that returns a new Config object with non-nil maps
 func NewPreferences() *Preferences {
 	return &Preferences{Extensions: make(map[string]runtime.Object)}
 }
