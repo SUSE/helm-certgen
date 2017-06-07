@@ -1,5 +1,3 @@
-package(default_visibility = ["//visibility:public"])
-
 licenses(["notice"])
 
 load(
@@ -47,13 +45,16 @@ go_library(
         "versioned_client.go",
     ],
     tags = ["automanaged"],
+    visibility = [
+        "//build/visible_to:COMMON_testing",
+        "//build/visible_to:pkg_kubectl_CONSUMERS",
+    ],
     deps = [
         "//federation/apis/federation/v1beta1:go_default_library",
         "//pkg/api:go_default_library",
-        "//pkg/api/annotations:go_default_library",
-        "//pkg/api/helper:go_default_library",
         "//pkg/api/util:go_default_library",
         "//pkg/api/v1:go_default_library",
+        "//pkg/api/v1/pod:go_default_library",
         "//pkg/apis/apps:go_default_library",
         "//pkg/apis/apps/v1beta1:go_default_library",
         "//pkg/apis/autoscaling:go_default_library",
@@ -65,6 +66,7 @@ go_library(
         "//pkg/apis/policy:go_default_library",
         "//pkg/apis/rbac:go_default_library",
         "//pkg/client/clientset_generated/clientset:go_default_library",
+        "//pkg/client/clientset_generated/clientset/typed/apps/v1beta1:go_default_library",
         "//pkg/client/clientset_generated/clientset/typed/core/v1:go_default_library",
         "//pkg/client/clientset_generated/clientset/typed/extensions/v1beta1:go_default_library",
         "//pkg/client/clientset_generated/internalclientset:go_default_library",
@@ -75,17 +77,20 @@ go_library(
         "//pkg/client/retry:go_default_library",
         "//pkg/client/unversioned:go_default_library",
         "//pkg/controller:go_default_library",
+        "//pkg/controller/daemon:go_default_library",
         "//pkg/controller/deployment/util:go_default_library",
         "//pkg/credentialprovider:go_default_library",
         "//pkg/kubectl/resource:go_default_library",
+        "//pkg/kubectl/util:go_default_library",
         "//pkg/printers:go_default_library",
         "//pkg/printers/internalversion:go_default_library",
         "//pkg/util:go_default_library",
         "//pkg/util/slice:go_default_library",
-        "//vendor/github.com/emicklei/go-restful/swagger:go_default_library",
+        "//vendor/github.com/emicklei/go-restful-swagger12:go_default_library",
         "//vendor/github.com/golang/glog:go_default_library",
         "//vendor/github.com/spf13/cobra:go_default_library",
         "//vendor/github.com/spf13/pflag:go_default_library",
+        "//vendor/k8s.io/apimachinery/pkg/api/equality:go_default_library",
         "//vendor/k8s.io/apimachinery/pkg/api/errors:go_default_library",
         "//vendor/k8s.io/apimachinery/pkg/api/meta:go_default_library",
         "//vendor/k8s.io/apimachinery/pkg/api/resource:go_default_library",
@@ -140,7 +145,6 @@ go_test(
     deps = [
         "//federation/apis/federation/v1beta1:go_default_library",
         "//pkg/api:go_default_library",
-        "//pkg/api/helper:go_default_library",
         "//pkg/api/testapi:go_default_library",
         "//pkg/api/testing:go_default_library",
         "//pkg/api/v1:go_default_library",
@@ -156,7 +160,7 @@ go_test(
         "//pkg/client/clientset_generated/internalclientset/typed/batch/internalversion:go_default_library",
         "//pkg/client/clientset_generated/internalclientset/typed/core/internalversion:go_default_library",
         "//pkg/client/clientset_generated/internalclientset/typed/extensions/internalversion:go_default_library",
-        "//pkg/controller/deployment/util:go_default_library",
+        "//pkg/kubectl/util:go_default_library",
         "//vendor/github.com/spf13/cobra:go_default_library",
         "//vendor/k8s.io/apimachinery/pkg/api/equality:go_default_library",
         "//vendor/k8s.io/apimachinery/pkg/api/errors:go_default_library",
@@ -180,7 +184,6 @@ filegroup(
     name = "package-srcs",
     srcs = glob(["**"]),
     tags = ["automanaged"],
-    visibility = ["//visibility:private"],
 )
 
 filegroup(
@@ -189,8 +192,13 @@ filegroup(
         ":package-srcs",
         "//pkg/kubectl/cmd:all-srcs",
         "//pkg/kubectl/metricsutil:all-srcs",
+        "//pkg/kubectl/plugins:all-srcs",
         "//pkg/kubectl/resource:all-srcs",
         "//pkg/kubectl/testing:all-srcs",
+        "//pkg/kubectl/util:all-srcs",
     ],
     tags = ["automanaged"],
+    visibility = [
+        "//build/visible_to:pkg_kubectl_CONSUMERS",
+    ],
 )

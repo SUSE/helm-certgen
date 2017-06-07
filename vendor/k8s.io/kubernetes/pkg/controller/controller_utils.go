@@ -17,8 +17,10 @@ limitations under the License.
 package controller
 
 import (
+	"encoding/binary"
 	"encoding/json"
 	"fmt"
+	"hash/fnv"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -29,23 +31,24 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apimachinery/pkg/util/clock"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/strategicpatch"
 	"k8s.io/apimachinery/pkg/util/wait"
-
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/record"
-	"k8s.io/client-go/util/clock"
 	"k8s.io/client-go/util/integer"
-
 	"k8s.io/kubernetes/pkg/api"
 	"k8s.io/kubernetes/pkg/api/v1"
 	v1helper "k8s.io/kubernetes/pkg/api/v1/helper"
+	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
+	"k8s.io/kubernetes/pkg/api/v1/ref"
 	"k8s.io/kubernetes/pkg/api/validation"
 	extensions "k8s.io/kubernetes/pkg/apis/extensions/v1beta1"
 	"k8s.io/kubernetes/pkg/client/clientset_generated/clientset"
 	clientretry "k8s.io/kubernetes/pkg/client/retry"
+	hashutil "k8s.io/kubernetes/pkg/util/hash"
 
 	"github.com/golang/glog"
 )
@@ -441,7 +444,7 @@ func getPodsAnnotationSet(template *v1.PodTemplateSpec, object runtime.Object) (
 	for k, v := range template.Annotations {
 		desiredAnnotations[k] = v
 	}
-	createdByRef, err := v1.GetReference(api.Scheme, object)
+	createdByRef, err := ref.GetReference(api.Scheme, object)
 	if err != nil {
 		return desiredAnnotations, fmt.Errorf("unable to get controller reference: %v", err)
 	}
@@ -674,13 +677,13 @@ func (s ByLogging) Less(i, j int) bool {
 		return m[s[i].Status.Phase] < m[s[j].Status.Phase]
 	}
 	// 3. ready < not ready
-	if v1.IsPodReady(s[i]) != v1.IsPodReady(s[j]) {
-		return v1.IsPodReady(s[i])
+	if podutil.IsPodReady(s[i]) != podutil.IsPodReady(s[j]) {
+		return podutil.IsPodReady(s[i])
 	}
 	// TODO: take availability into account when we push minReadySeconds information from deployment into pods,
 	//       see https://github.com/kubernetes/kubernetes/issues/22065
 	// 4. Been ready for more time < less time < empty time
-	if v1.IsPodReady(s[i]) && v1.IsPodReady(s[j]) && !podReadyTime(s[i]).Equal(podReadyTime(s[j])) {
+	if podutil.IsPodReady(s[i]) && podutil.IsPodReady(s[j]) && !podReadyTime(s[i]).Equal(podReadyTime(s[j])) {
 		return afterOrZero(podReadyTime(s[j]), podReadyTime(s[i]))
 	}
 	// 5. Pods with containers with higher restart counts < lower restart counts
@@ -713,14 +716,14 @@ func (s ActivePods) Less(i, j int) bool {
 	}
 	// 3. Not ready < ready
 	// If only one of the pods is not ready, the not ready one is smaller
-	if v1.IsPodReady(s[i]) != v1.IsPodReady(s[j]) {
-		return !v1.IsPodReady(s[i])
+	if podutil.IsPodReady(s[i]) != podutil.IsPodReady(s[j]) {
+		return !podutil.IsPodReady(s[i])
 	}
 	// TODO: take availability into account when we push minReadySeconds information from deployment into pods,
 	//       see https://github.com/kubernetes/kubernetes/issues/22065
 	// 4. Been ready for empty time < less time < more time
 	// If both pods are ready, the latest ready one is smaller
-	if v1.IsPodReady(s[i]) && v1.IsPodReady(s[j]) && !podReadyTime(s[i]).Equal(podReadyTime(s[j])) {
+	if podutil.IsPodReady(s[i]) && podutil.IsPodReady(s[j]) && !podReadyTime(s[i]).Equal(podReadyTime(s[j])) {
 		return afterOrZero(podReadyTime(s[i]), podReadyTime(s[j]))
 	}
 	// 5. Pods with containers with higher restart counts < lower restart counts
@@ -744,7 +747,7 @@ func afterOrZero(t1, t2 metav1.Time) bool {
 }
 
 func podReadyTime(pod *v1.Pod) metav1.Time {
-	if v1.IsPodReady(pod) {
+	if podutil.IsPodReady(pod) {
 		for _, c := range pod.Status.Conditions {
 			// we only care about pod ready conditions
 			if c.Type == v1.PodReady && c.Status == v1.ConditionTrue {
@@ -977,4 +980,19 @@ func WaitForCacheSync(controllerName string, stopCh <-chan struct{}, cacheSyncs 
 
 	glog.Infof("Caches are synced for %s controller", controllerName)
 	return true
+}
+
+// ComputeHash returns a hash value calculated from pod template and a collisionCount to avoid hash collision
+func ComputeHash(template *v1.PodTemplateSpec, collisionCount *int64) uint32 {
+	podTemplateSpecHasher := fnv.New32a()
+	hashutil.DeepHashObject(podTemplateSpecHasher, *template)
+
+	// Add collisionCount in the hash if it exists.
+	if collisionCount != nil {
+		collisionCountBytes := make([]byte, 8)
+		binary.LittleEndian.PutUint64(collisionCountBytes, uint64(*collisionCount))
+		podTemplateSpecHasher.Write(collisionCountBytes)
+	}
+
+	return podTemplateSpecHasher.Sum32()
 }

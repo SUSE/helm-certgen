@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -51,6 +51,22 @@ type tokenBucketRateLimiter struct {
 // The maximum number of tokens in the bucket is capped at 'burst'.
 func NewTokenBucketRateLimiter(qps float32, burst int) RateLimiter {
 	limiter := ratelimit.NewBucketWithRate(float64(qps), int64(burst))
+	return newTokenBucketRateLimiter(limiter, qps)
+}
+
+// An injectable, mockable clock interface.
+type Clock interface {
+	ratelimit.Clock
+}
+
+// NewTokenBucketRateLimiterWithClock is identical to NewTokenBucketRateLimiter
+// but allows an injectable clock, for testing.
+func NewTokenBucketRateLimiterWithClock(qps float32, burst int, clock Clock) RateLimiter {
+	limiter := ratelimit.NewBucketWithRateAndClock(float64(qps), int64(burst), clock)
+	return newTokenBucketRateLimiter(limiter, qps)
+}
+
+func newTokenBucketRateLimiter(limiter *ratelimit.Bucket, qps float32) RateLimiter {
 	return &tokenBucketRateLimiter{
 		limiter: limiter,
 		qps:     qps,
