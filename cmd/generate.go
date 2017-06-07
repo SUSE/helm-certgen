@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/SUSE/helm-certgen/pkg/certgen"
 	"github.com/spf13/cobra"
 )
 
@@ -28,8 +29,8 @@ func newGenerateCmd(out io.Writer) *cobra.Command {
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) <= 0 {
-				PrintError(gc.out, "Please specify the chart to be installed.")
-				PrintStatus(gc.out, "\nGet help on how to use generate command with, helm certgen generate --help")
+				fmt.Printf("Please specify the chart to be installed.")
+				fmt.Printf("\nGet help on how to use generate command with, helm certgen generate --help")
 
 				return nil
 			}
@@ -43,7 +44,6 @@ func newGenerateCmd(out io.Writer) *cobra.Command {
 }
 
 func (g *generateCmd) run(args []string) error {
-	PrintInfo(g.out, "Creating")
 	var certyaml string
 	if len(g.certyaml) == 0 {
 		certyaml = args[0] + "/certs.yaml"
@@ -56,5 +56,10 @@ func (g *generateCmd) run(args []string) error {
 			return fmt.Errorf("certyaml file %s not found", certyaml)
 		}
 	}
+	certSecret, _ := certgen.GetCertConfig(certyaml)
+	fmt.Printf("Creating certificates for %s", certSecret.Name)
+
+	certGen := certgen.New(g.namespace)
+	certGen.GenerateCertificate(certSecret)
 	return nil
 }
