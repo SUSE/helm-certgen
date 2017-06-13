@@ -22,3 +22,6 @@ debug
 
 bin/*
 build/*
+
+.cover/*
+
