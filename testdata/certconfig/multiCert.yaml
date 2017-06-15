@@ -1,0 +1,30 @@
+name: go-demo-api-certificates
+metadata:
+  name: go-demo-api-tls
+  lables:
+    name: go-demo-api-tls
+    app: go-demo
+    chart: go-demo
+spec:
+  api:
+    name: go-demo-api-tls
+    csr:
+      country: US
+      state: Washington
+      locality: Seattle
+      organisationname: Suse
+      organisationalunitname: CaaSP
+    hosts:
+    - mydemo.com
+    - demoapp.com
+    - hdemo
+  backend:
+    name: go-demo-backend-tls
+    csr:
+      country: US
+      state: Washington
+      locality: Seattle
+      organisationname: Suse
+      organisationalunitname: CaaSP
+    hosts:
+    - backend
