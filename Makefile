@@ -48,6 +48,12 @@ test-style:
 	@echo "Running style checks"
 	scripts/validate-go.sh
 
+.PHONY: coverage
+coverage:
+	@echo "================="
+	@echo "Running tests with coverage tool"
+	./scripts/test-coverage.sh
+
 .PHONY: build
 build: 
 	@echo "================="
