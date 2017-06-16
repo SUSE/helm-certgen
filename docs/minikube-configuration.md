@@ -3,13 +3,23 @@
 Minikube is an awesome tool to get started with Kubernetes and to run Kubernetes for the development environment. It is also very powerful because it is easy to configure various services.
 
 ## Starting Minikube
-As specified in Kubernetes documentation, to configure certificate signer correctly we need to pass set of command line parameters to Kubernetes controller. To set these parameters on Minikube, you can specify following command line parameters to minikube start command
+As specified in [Kubernetes documentation](https://kubernetes.io/docs/tasks/tls/managing-tls-in-a-cluster), to configure certificate signer correctly we need to pass set of command line parameters to Kubernetes controller. To set these parameters on Minikube, you can specify following command line parameters to minikube start command
 
+### If you are on Mac
 ```
 minikube start  --extra-config=controller-manager.ClusterSigningCertFile="<UserHome>/.minikube/certs/ca.pem" --extra-config=controller-manager.ClusterSigningKeyFile="<UserHome>/.minikube/certs/ca-key.pem"
 ```
 
 Make sure to set an appropriate path for UserHome in above command, because that is where .minikube directory will get created and certs will be available inside that directory.
+
+### If you are on Linux
+```
+minikube start  --extra-config=controller-manager.ClusterSigningCertFile="/hosthome/<Username>/.minikube/certs/ca.pem" --extra-config=controller-manager.ClusterSigningKeyFile="/hosthome/<Username>/.minikube/certs/ca-key.pem"
+```
+
+The difference between the `start` command on Mac and Linux is the path. On mac minikube mounts `/Users` directory as is into the VM, so the actual path from host is available as is inside the VM. But on Linix the `/home` directory is mounted @ `/hosthome`, so instead of `/home/<username>` you need to use `/hosthome/<username>`. 
+
+While the path on your host machine is important to identify and locate the minikube home directory and corresponding certificates, you need to make sure for `minikube start` command you use the path that is available/accessible from inside the VM. So that when kubernetes services start, inside the VM, they have access to that certificate path.
 
 ## Adding CA to the trust store
 
