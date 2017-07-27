@@ -23,13 +23,14 @@ tools:
 	go get github.com/tools/godep
 	go get github.com/spf13/cobra
 
-
 .PHONY: clean
 clean:
 	rm -rf ${GOBIN}/helm-certgen
 	rm -rf helm-certgen
 	rm -rf debug
 	rm -rf build
+	rm -rf bin/helm-certgen
+	rm -rf dist
 
 .PHONY: test-all
 test-all: test-unit
@@ -59,4 +60,12 @@ build:
 	@echo "================="
 	@echo "Building helm-certgen plugin @ $(BINDIR)"
 	$(GO) build $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' -o $(BINDIR)/helm-certgen main.go
+
+.PHONY: build
+build-all:
+	@echo "================="
+	@echo "Building helm-certgen plugin for all the platforms@ $(BINDIR)"
+	GOOS=linux GOARCH=amd64 $(GO) build $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' -o dist/linux-amd64/certgen main.go
+	GOOS=windows GOARCH=amd64 $(GO) build $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' -o dist/windows-amd64/certgen main.go
+	GOOS=darwin GOARCH=amd64 $(GO) build $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' -o dist/darwin-amd64/certgen main.go
 
