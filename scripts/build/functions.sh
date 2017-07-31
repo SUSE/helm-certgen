@@ -30,7 +30,13 @@ create_distributable(){
 
     if [ "${BUILDOS}" == "windows" ];
     then
-        zip -jr ${DIST_DIR}/certgen-${BUILDOS}-${BUILDARCH}-${VERSION_DIR}.zip ${P_BUILD_DIR}/*
+        which zip
+        if [ $? -eq 0 ]; 
+        then
+            zip -jr ${DIST_DIR}/certgen-${BUILDOS}-${BUILDARCH}-${VERSION_DIR}.zip ${P_BUILD_DIR}/*
+        else
+            tar -cvzf ${DIST_DIR}/certgen-${BUILDOS}-${BUILDARCH}-${VERSION_DIR}.tgz -C ${P_BUILD_DIR} .
+        fi
     else
         tar -cvzf ${DIST_DIR}/certgen-${BUILDOS}-${BUILDARCH}-${VERSION_DIR}.tgz -C ${P_BUILD_DIR} .
     fi
