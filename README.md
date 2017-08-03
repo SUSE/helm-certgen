@@ -12,50 +12,18 @@ Since the plugin uses Kubernetes certificate API, we suggest that you use it aga
 
 If you are using Minikube then please follow the [minikube configuration](docs/minikube-configuration.md) guide to make sure that your minikube is setup correctly for approving CSR and issuing the certificates.
 
-
-## Installing certgen plugin
-There are three steps for installing this plugin successfully.
-
-### 1. Setting up environment
-#### Go runtime
-Currently to use the plugin you need to have **`go`** (1.8) run time installed on your machine so that you can build the plugin binary. To verify that you can run the following command and you should see the expected output
-```
-# go version
-go version go1.8 darwin/amd64
-```
-If you run this on Linux machine, you will see `go version go1.8 linux/amd64`
-
-#### Environment variables
-Make sure GOBIN path is set and is included in your PATH
-```
-export GOBIN=$GOPATH/bin
-export PATH=$PATH:${GOBIN}
-```
-
-### 2. Build plugin binary
-The following command will generate `helm-certgen` binary in GOBIN path
-```
-mkdir -p ${GOPATH}/src/github.com/SUSE
-cd ${GOPATH}/src/github.com/SUSE
-git clone https://github.com/SUSE/helm-certgen.git
-cd helm-certgen
-make build
-```
-
-### 3. Add certgen to helm CLI
-To install the plugin, we will have to copy the wrapper scripts from project's plugin directory to HELM_HOME, so run following commands
+## Installing the plugin
+Download the released version of the plugin for your operating system from the [https://github.com/SUSE/helm-certgen/releases](https://github.com/SUSE/helm-certgen/releases) page. After downloading the package files, extract the archieve locally and then run the helm plugin install command on that path.
 
 ```
-HELM_HOME=$(helm home)
-mkdir -p ${HELM_HOME}/plugins/certgen
-cp $GOPATH/src/github.com/SUSE/helm-certgen/plugin/* $HELM_HOME/plugins/certgen/
+helm plugin install /tmp/certgen-darwin-amd64-1-0-0-1501786067-53c4719
 ```
+If you would like to build the plugin yourself locally follow the instructions from this @ [readme](docs/build-plugin.md) 
 
 ## Using Plugin
 To understand how to use the plugin, we will try to deploy sample/go-demo-app using this plugin and helm cli.
 
 More details on how sample/go-demo-app can be found @ [sample/go-demo-app](sample/go-demo-app/README.md) 
-
 
 ### Deploying the application
 
