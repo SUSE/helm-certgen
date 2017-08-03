@@ -1,16 +1,14 @@
-#!/bin/sh
-set -u
+#!/bin/bash -x
 
-export BRANCH=$(git name-rev --name-only HEAD)
-export BRANCH_TAG=$(echo $BRANCH | tr "/" "-" | cut -c1-5)
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BASEDIR="${SCRIPTDIR}/../.."
 
-build_commit_hash=$(git rev-parse --short HEAD)
-build_time=$(date -u +%Y%m%d%H%M%S)
-
-if [ "${BRANCH}" = "master" ]; then
-    export VERSION=$(git describe --tags --long)
-else
-    LATEST_TAG_VERSION=$(git describe --tags --long | cut -d "." -f 1,2,3)
-    export VERSION="${LATEST_TAG_VERSION}+${BRANCH}.${build_time}"
+if [ -z ${VERSION} ];
+then
+    BRANCH=$(git name-rev --name-only HEAD | tr "/" "-")
+    VERSION_FROM_FILE=$(cat ${BASEDIR}/version)
+    LAST_COMMIT=$(git rev-parse --short HEAD)
+    LAST_TIMESTAMP=$(git log -1 --pretty=format:%ct)
+    export VERSION="${VERSION_FROM_FILE}-${LAST_TIMESTAMP}.${LAST_COMMIT}+${BRANCH}"
 fi
 echo ${VERSION}
