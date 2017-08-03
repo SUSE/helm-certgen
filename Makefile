@@ -10,9 +10,12 @@ else
     BINDIR:=$(CURDIR)/bin
 endif
 
+ifeq ($(strip $(VERSION)),)
+    export VERSION := $(shell scripts/build/get_version.sh)
+endif
 
 .PHONY: all
-all: clean test-all build
+all: clean-all test-all build-all
 
 .PHONY: tools
 tools:
@@ -23,13 +26,16 @@ tools:
 	go get github.com/tools/godep
 	go get github.com/spf13/cobra
 
-
 .PHONY: clean
 clean:
-	rm -rf ${GOBIN}/helm-certgen
-	rm -rf helm-certgen
+	rm -rf build
+
+.PHONY: clean-all
+clean-all: clean
+	rm -rf bin
 	rm -rf debug
 	rm -rf build
+	rm -rf dist
 
 .PHONY: test-all
 test-all: test-unit
@@ -55,8 +61,14 @@ coverage:
 	./scripts/test-coverage.sh
 
 .PHONY: build
-build: 
+build: clean
 	@echo "================="
-	@echo "Building helm-certgen plugin @ $(BINDIR)"
-	$(GO) build $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' -o $(BINDIR)/helm-certgen main.go
+	./scripts/build/build.sh
+
+.PHONY: build-all
+build-all: clean-all
+	@echo "================="
+	@echo "Building helm-certgen plugin for all the platforms@ $(BINDIR)"
+	./scripts/build/build-all-platforms.sh
+
 

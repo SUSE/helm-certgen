@@ -44,8 +44,10 @@ if [[ $# < 1 ]]; then
   exit 1
 fi
 
-if ! type "helm-certgen" > /dev/null; then
-  echo "helm-certgen client needs to be installed"
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+if ! [ -f ${SCRIPTDIR}/certgen ]; then
+  echo "Error: certgen binary not found."
   exit 1
 fi
 
@@ -56,7 +58,7 @@ case "${1:-"help"}" in
       usage
       exit 1
     fi
-    helm-certgen $@
+    ${SCRIPTDIR}/certgen $@
     ;;
   "help")
     usage
