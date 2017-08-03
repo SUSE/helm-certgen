@@ -12,7 +12,7 @@ build_binary(){
     local P_BUILD_DIR=$3
     mkdir -p ${P_BUILD_DIR}
 
-    echo "Building helm-certgen binary for ${BUILDOS}-${BUILDARCH} @ ${P_BUILD_DIR}"
+    echo "Building helm-certgen plugin for ${BUILDOS}-${BUILDARCH} @ ${P_BUILD_DIR}"
     GOOS=${BUILDOS} GOARCH=${BUILDARCH} go build -ldflags '-s' -o ${P_BUILD_DIR}/certgen ${BASEDIR}/main.go
 }
 
